@@ -6,4 +6,4 @@ def filter_by_state(list_of_dictionaries: List[Dict[str, str]], state: str = 'EX
 
 def sort_by_date(list_of_dictionaries: List[Dict[str, str]], reverse: bool = True) -> List[Dict[str, str]]:
     """ Функция сортировки по дате."""
-    return sorted(list_of_dictionaries, key=lambda item: item.get('date'), reverse=reverse)git
+    return sorted(list_of_dictionaries, key=lambda item: item.get('date'), reverse=reverse)
