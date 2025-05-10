@@ -6,7 +6,7 @@ git add
 , 
 git commit
  и 
-git push
+git push 1
 .
 В директории 
 src
