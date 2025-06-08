@@ -1,5 +1,7 @@
 import pytest
+
 from src.widget import mask_account_card
+
 
 # Тестирование нормального случая
 def test_mask_account_card_normal_case():

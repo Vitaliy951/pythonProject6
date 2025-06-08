@@ -1,5 +1,7 @@
 import pytest
-from src.processing import filter_by_state, sort_by_date, format_date
+
+from src.processing import filter_by_state, format_date, sort_by_date
+
 
 def test_filter_by_state():
     """Тестирование фильтрации по статусу."""

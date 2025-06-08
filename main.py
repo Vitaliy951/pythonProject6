@@ -1,4 +1,5 @@
-from typing import List, Dict  # Объединяем импорты в одну строку
+from typing import Dict, List  # Объединяем импорты в одну строку
+
 
 def filter_by_state(list_of_dictionaries: List[Dict[str, str]], state: str = 'EXECUTED') -> List[Dict[str, str]]:
     """Функция фильтрации по ключу 'state'."""
