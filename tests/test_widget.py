@@ -1,46 +1,49 @@
 import pytest
-from widget import mask_account_card
 
-def test_mask_account_card_visa():
-    """Тестирование маскирования номера карты Visa"""
-    result = mask_account_card("Visa 1234 5678 9012 3456")
+from src.widget import mask_account_card
+
+
+# Тестирование нормального случая
+def test_mask_account_card_normal_case():
+    result = mask_account_card("Visa 1234567890123456")
     assert result == "Visa 1234 56** **** 3456"
 
-def test_mask_account_card_maestro():
-    """Тестирование маскирования номера карты Maestro"""
-    result = mask_account_card("Maestro 1234 5678 9012 3456")
-    assert result == "Maestro 1234 56** **** 3456"
-
-def test_mask_account_card_account():
-    """Тестирование маскирования номера счета"""
-    result = mask_account_card("Счет 1234567890")
-    assert result == "Счет **7890"
-
-def test_mask_account_card_invalid_type():
-    """Тестирование обработки неизвестного типа аккаунта"""
+# Тестирование неизвестного типа аккаунта
+def test_mask_account_card_unknown_type():
     with pytest.raises(ValueError, match="Неизвестный тип аккаунта или карты."):
-        mask_account_card("UnknownType 1234 5678 9012 3456")
+        mask_account_card("unknown 1234567890123456")
 
-def test_mask_account_card_empty_input():
-    """Тестирование обработки пустого ввода"""
+# Тестирование недостаточной длины номера
+def test_mask_account_card_short_number():
+    with pytest.raises(ValueError, match="Номер карты должен состоять из 16 цифр."):
+        mask_account_card("Visa 1234")
+
+# Тестирование границы минимальной длины строки
+def test_mask_account_card_minimal_string():
     with pytest.raises(ValueError, match="Строка должна содержать тип аккаунта и номер."):
-        mask_account_card("")
+        mask_account_card("V")
 
-def test_mask_account_card_invalid_format():
-    """Тестирование обработки некорректного формата"""
+# Тестирование короткого имени типа аккаунта
+def test_mask_account_card_too_short_type():
+    with pytest.raises(ValueError, match="Неизвестный тип аккаунта или карты."):
+        mask_account_card("v 1234567890123456")
+
+# Тестирование границы с пустым номером
+def test_mask_account_card_empty_number():
     with pytest.raises(ValueError, match="Строка должна содержать тип аккаунта и номер."):
-        mask_account_card("Visa1234567890123456")  # Без пробелов
+        mask_account_card("Visa ")
 
-def test_mask_account_card_spaces():
-    """Тестирование обработки лишних пробелов"""
-    result = mask_account_card("   Visa    1234 5678 9012 3456   ")
-    assert result == "Visa 1234 56** **** 3456"
+# Тестирование короткого типа аккаунта
+def test_mask_account_card_short_type():
+    with pytest.raises(ValueError, match="Неизвестный тип аккаунта или карты."):
+        mask_account_card("vi 1234567890123456")
 
-def test_mask_account_card_extra_spaces():
-    """Тестирование обработки лишних пробелов в типе и номере"""
-    result = mask_account_card("   Maestro    1234  5678  9012  3456   ")
-    assert result == "Maestro 1234 56** **** 3456"
+# Тестирование слишком длинного имени типа аккаунта
+def test_mask_account_card_long_type_name():
+    with pytest.raises(ValueError, match="Неизвестный тип аккаунта или карты."):
+        mask_account_card("superlongtypename 1234567890123456")
 
-# Запуск тестов
-if __name__ == "__main__":
-    pytest.main()
+# Тестирование "счет"-типа
+def test_mask_account_card_account():
+    result = mask_account_card("счет 1234567890123456")
+    assert result == "Счет **** **** **** 3456"
