@@ -1,0 +1,3 @@
+pandas
+openpyxl  # Для работы с Excel файлами
+pytest

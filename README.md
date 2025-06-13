@@ -335,6 +335,23 @@ filter_by_currency
 7 directories, 50 files
 (pythonproject6-py3.12) MBPVitaKorzuhin:pythonProject6 VitaliyKorzuhin$ 
 
+# Финансовые операции
+
+## Описание
+
+Этот проект включает модуль для считывания финансовых операций из CSV и Excel файлов.
+
+## Функции
+
+- `read_financial_operations_from_csv(file_path)`: Считывает финансовые операции из CSV файла.
+- `read_financial_operations_from_excel(file_path)`: Считывает финансовые операции из Excel файла.
+
+## Установка
+
+1. Клонируйте репозиторий.
+2. Установите зависимости:
+   ```bash
+   pip install -r requirements.txt
 
 
 =======
