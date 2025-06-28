@@ -1,7 +1,6 @@
 import unittest
 from unittest.mock import patch
-from src.external_api import convert_currency  # Предполагается, что ваш код в файле external_api.py
-
+from external_api import convert_currency  # Предполагается, что ваш код в файле external_api.py
 
 class TestConvertCurrency(unittest.TestCase):
 
@@ -24,6 +23,7 @@ class TestConvertCurrency(unittest.TestCase):
         result = convert_currency(transaction)
 
         self.assertEqual(result, 100)  # Ожидаем, что сумма останется без изменений
+        mock_get.assert_not_called()  # Проверяем, что запрос к API не был выполнен
 
     @patch('external_api.requests.get')
     def test_convert_currency_api_error(self, mock_get):
@@ -36,6 +36,7 @@ class TestConvertCurrency(unittest.TestCase):
             convert_currency(transaction)
 
         self.assertEqual(str(context.exception), 'Не удалось конвертировать валюту')
+        mock_get.assert_called_once()  # Проверяем, что запрос был выполнен один раз
 
     def test_convert_currency_key_error(self):
         # Проверяем, что выбрасывается KeyError при отсутствии ключа 'currency'
@@ -43,7 +44,6 @@ class TestConvertCurrency(unittest.TestCase):
 
         with self.assertRaises(KeyError):
             convert_currency(transaction)
-
 
 if __name__ == '__main__':
     unittest.main()
