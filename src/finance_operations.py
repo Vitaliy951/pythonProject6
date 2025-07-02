@@ -1,6 +1,7 @@
-import pandas as pd
 import logging
-from typing import List, Dict
+from typing import Dict, List
+
+import pandas as pd
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
@@ -16,9 +17,9 @@ def read_financial_operations_from_csv(file_path: str) -> List[Dict]:
     """
     try:
         # Чтение CSV файла с разделителем ';'
-        df = pd.read_csv(file_path, sep=';')
+        df = pd.read_csv(file_path, sep=";")
         # Преобразование DataFrame в список словарей
-        transactions = df.to_dict(orient='records')
+        transactions = df.to_dict(orient="records")
         logger.info(f"Успешно считано {len(transactions)} транзакций из {file_path}.")
         return transactions
     except Exception as e:
@@ -37,7 +38,7 @@ def read_financial_operations_from_excel(file_path: str) -> List[Dict]:
         # Чтение Excel файла
         df = pd.read_excel(file_path)
         # Преобразование DataFrame в список словарей
-        transactions = df.to_dict(orient='records')
+        transactions = df.to_dict(orient="records")
         logger.info(f"Успешно считано {len(transactions)} транзакций из {file_path}.")
         return transactions
     except Exception as e:
