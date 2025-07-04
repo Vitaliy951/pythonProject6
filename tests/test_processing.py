@@ -3,7 +3,7 @@ import pytest
 from src.processing import filter_by_state, format_date, sort_by_date
 
 
-def test_filter_by_state():
+def test_filter_by_state() -> None:
     """Тестирование фильтрации по статусу."""
     data = [
         {"state": "approved", "date": "2025-05-01"},
@@ -14,7 +14,8 @@ def test_filter_by_state():
     assert len(result) == 2
     assert all(item["state"] == "approved" for item in result)
 
-def test_sort_by_date_ascending():
+
+def test_sort_by_date_ascending() -> None:
     """Тестирование сортировки по дате в порядке возрастания."""
     data = [
         {"state": "pending", "date": "2025-05-02"},
@@ -24,7 +25,8 @@ def test_sort_by_date_ascending():
     result = sort_by_date(data, ascending=True)
     assert result[0]["date"] == "2025-05-01"  # Проверка, что первая дата - 1 мая
 
-def test_sort_by_date_descending():
+
+def test_sort_by_date_descending() -> None:
     """Тестирование сортировки по дате в порядке убывания."""
     data = [
         {"state": "pending", "date": "2025-05-02"},
@@ -34,7 +36,8 @@ def test_sort_by_date_descending():
     result = sort_by_date(data, ascending=False)
     assert result[0]["date"] == "2025-05-03"  # Проверка, что первая дата - 3 мая
 
-def test_format_date():
+
+def test_format_date() -> None:
     """Тестирование преобразования формата даты."""
     date_str = "2025-05-01"
     current_format = "%Y-%m-%d"
@@ -42,7 +45,8 @@ def test_format_date():
     result = format_date(date_str, current_format, desired_format)
     assert result == "01/05/2025"  # Проверка правильного преобразования даты
 
-def test_format_date_invalid():
+
+def test_format_date_invalid() -> None:
     """Тестирование обработки неверного формата даты."""
     with pytest.raises(ValueError):
         format_date("invalid-date", "%Y-%m-%d", "%d/%m/%Y")
