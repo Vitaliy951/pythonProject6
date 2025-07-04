@@ -1,49 +1,67 @@
-import pytest
+import unittest
 from unittest.mock import patch, MagicMock
-from main import main
+from collections import Counter
+from src.utils import read_json_file
+from main import filter_by_search, count_transactions_by_category, main
 
 
-@pytest.fixture
-def mock_transactions():
-    return [
-        {
-            "operationAmount": {
-                "currency": {"code": "RUB"},
-                "amount": 1000
-            },
-            "description": "Транзакция 1",
-            "state": "EXECUTED",
-            "account_type": "счет",
-            "account_number": "1234567812345678",
-            "date": "2023-01-01"
-        },
-        {
-            "operationAmount": {
-                "currency": {"code": "USD"},
-                "amount": 500
-            },
-            "description": "Транзакция 2",
-            "state": "CANCELED",
-            "account_type": "visa",
-            "account_number": "8765432187654321",
-            "date": "2023-02-01"
-        }
-    ]
+class TestTransactionProcessing(unittest.TestCase):
 
+    def setUp(self):
+        self.transactions = [
+            {"description": "Оплата за услуги", "category": "Услуги", "account_number": "1234-5678-9012-3456",
+             "account_type": "карта"},
+            {"description": "Перевод между счетами", "category": "Переводы", "account_number": "9876-5432-1098-7654",
+             "account_type": "счет"},
+            {"description": "Оплата за покупки", "category": "Покупки", "account_number": "1111-2222-3333-4444",
+             "account_type": "карта"},
+            {"description": "Возврат товара", "category": "Покупки", "account_number": "5555-6666-7777-8888",
+             "account_type": "счет"},
+        ]
 
-@patch('main.read_json_file')
-@patch('main.mask_account_card')
-def test_main(mock_mask_account_card, mock_read_json_file, mock_transactions):
-    mock_read_json_file.return_value = mock_transactions
-    mock_mask_account_card.return_value = "MASKED_ACCOUNT 1234"
+    def test_filter_by_search(self):
+        """ Тестируем фильтрацию по строке поиска"""
 
-    with patch('builtins.input', side_effect=["mock_path.json", "RUB", "EXECUTED", "возрастание"]):
+        filtered = filter_by_search(self.transactions, "Оплата")
+        self.assertEqual(len(filtered), 2)  # Должно вернуть 2 транзакции
+
+        filtered = filter_by_search(self.transactions, "Перевод")
+        self.assertEqual(len(filtered), 1)  # Должно вернуть 1 транзакцию
+
+        filtered = filter_by_search(self.transactions, "Неизвестно")
+        self.assertEqual(len(filtered), 0)  # Должно вернуть 0 транзакций
+
+    def test_count_transactions_by_category(self):
+        # Тестируем подсчет по категориям
+        category_counts = count_transactions_by_category(self.transactions, ["Услуги", "Покупки"])
+        self.assertEqual(category_counts, {"Услуги": 1, "Покупки": 2})  # Проверяем количество по категориям
+
+        category_counts = count_transactions_by_category(self.transactions, ["Переводы"])
+        self.assertEqual(category_counts, {"Переводы": 1})  # Должно вернуть 1
+
+        category_counts = count_transactions_by_category(self.transactions, ["Неизвестно"])
+        self.assertEqual(category_counts, {})  # Должно вернуть пустой словарь
+
+    @patch('src.utils.read_json_file')
+    @patch('builtins.input',
+           side_effect=["path/to/file.json", "RUB", "Оплата", "EXECUTED", "возрастание", "Услуги, Покупки"])
+    @patch('builtins.print')
+    def test_main(self, mock_print, mock_input, mock_read_json):
+        """ Имитация чтения JSON файла"""
+        mock_read_json.return_value = self.transactions
+
+        """ Вызов основной функции"""
         main()
 
-    mock_read_json_file.assert_called_once_with("mock_path.json")
-    mock_mask_account_card.assert_called_with("счет 1234567812345678")
-    assert mock_mask_account_card.call_count == 1
+        """ Проверка, что print был вызван"""
+        mock_print.assert_any_call("Привет! Добро пожаловать в программу работы с банковскими транзакциями.")
+        mock_print.assert_any_call("Описание транзакций:")
+        mock_print.assert_any_call("Оплата за услуги")
+        mock_print.assert_any_call("Оплата за покупки")
+        mock_print.assert_any_call("Количество операций по категориям:")
+        mock_print.assert_any_call("Услуги: 1")
+        mock_print.assert_any_call("Покупки: 2")
 
 
-if __name__ == "__main__":
-    pytest.main()
+if __name__ == '__main__':
+    unittest.main()
