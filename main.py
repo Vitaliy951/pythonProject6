@@ -1,18 +1,15 @@
 import re
 from collections import Counter
-from typing import Any, Dict, List
-
+from typing import List, Dict, Any
 from src.generators import filter_by_currency, transaction_descriptions
 from src.processing import filter_by_state, sort_by_date
 from src.utils import read_json_file
 from src.widget import mask_account_card
 
-
 def filter_by_search(transactions: List[Dict[str, Any]], search_string: str) -> List[Dict[str, Any]]:
     """Фильтрует транзакции по заданной строке поиска."""
     pattern = re.compile(re.escape(search_string), re.IGNORECASE)
     return [transaction for transaction in transactions if pattern.search(transaction.get("description", ""))]
-
 
 def count_transactions_by_category(transactions: List[Dict[str, Any]], categories: List[str]) -> Dict[str, int]:
     """Подсчитывает количество транзакций по заданным категориям."""
@@ -38,7 +35,8 @@ def main() -> None:
     currency_code = input("Введите код валюты для фильтрации: ")
     filtered_transactions = filter_by_currency(transactions, currency_code)
 
-    """ Фильтрация по строке поиска"""
+
+""" Фильтрация по строке поиска"""
     search_string = input("Введите строку для поиска в описаниях транзакций: ")
     filtered_by_search = filter_by_search(filtered_transactions, search_string)
 
