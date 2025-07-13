@@ -61,11 +61,11 @@ def main() -> None:
         print("Не удалось загрузить транзакции.")
         return
 
-    # Фильтрация по валюте
+    """Фильтрация по валюте"""
     currency_code = input("Введите код валюты для фильтрации: ")
     filtered_transactions = filter_by_currency(transactions, currency_code)
 
-    # Фильтрация по строке поиска
+    """Фильтрация по строке поиска"""
     search_string = input("Введите строку для поиска в описаниях транзакций: ")
     filtered_by_search = filter_by_search(filtered_transactions, search_string)
 
@@ -73,13 +73,13 @@ def main() -> None:
         print("Не найдено транзакций по заданной строке поиска.")
         return
 
-    # Вывод описаний транзакций
+    """Вывод описаний транзакций"""
     descriptions = list(transaction_descriptions(filtered_by_search))
     print("Описание транзакций:")
     for desc in descriptions:
         print(desc)
 
-    # Запрос статуса для фильтрации
+    """Запрос статуса для фильтрации"""
     state = input("Введите статус для фильтрации (например, 'EXECUTED', 'CANCELED', 'PENDING'): ").strip().upper()
     filtered_by_state = filter_by_state(filtered_by_search, state)
 
@@ -87,19 +87,19 @@ def main() -> None:
         print("Не найдено транзакций с указанным статусом.")
         return
 
-    # Сортировка по дате
+    """Сортировка по дате"""
     sort_order = input("Сортировать по дате (возрастание/убывание)? ").strip().lower()
     ascending = sort_order == "возрастание"
     sorted_transactions = sort_by_date(filtered_by_state, ascending)
 
-    # Маскирование карт и счетов
+    """Маскирование карт и счетов"""
     for transaction in sorted_transactions:
         account_type = transaction.get("account_type", "счет")  # Предположим, что в транзакции есть этот ключ
         account_number = transaction.get("account_number", "")
         masked_info = mask_account_card(f"{account_type} {account_number}")
         print(masked_info)
 
-    # Подсчет операций по категориям
+    """ Подсчет операций по категориям"""
     categories = input("Введите категории для подсчета (через запятую): ").split(",")
     categories = [cat.strip() for cat in categories]
     category_counts = count_transactions_by_category(filtered_by_state, categories)
