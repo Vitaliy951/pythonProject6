@@ -1,24 +1,29 @@
 import re
 from collections import Counter
-from typing import List, Dict, Any
+from typing import Any, Dict, List, Optional
+
+import pandas as pd  # Импортируем библиотеку pandas
+
 from src.generators import filter_by_currency, transaction_descriptions
 from src.processing import filter_by_state, sort_by_date
 from src.utils import read_json_file
 from src.widget import mask_account_card
 
+
 def load_json(file_path: str) -> List[Dict[str, Any]]:
     """Загружает данные из JSON файла."""
-    return read_json_file(file_path)
+    data = read_json_file(file_path)
+    return data if data is not None else []  # Возвращаем пустой список, если данные None
 
 def load_csv(file_path: str) -> List[Dict[str, Any]]:
     """Загружает данные из CSV файла."""
     df = pd.read_csv(file_path)
-    return df.to_dict(orient='records')
+    return df.to_dict(orient='records')  # Возвращаем список словарей
 
 def load_excel(file_path: str) -> List[Dict[str, Any]]:
     """Загружает данные из XLSX файла."""
     df = pd.read_excel(file_path)
-    return df.to_dict(orient='records')
+    return df.to_dict(orient='records')  # Возвращаем список словарей
 
 def filter_by_search(transactions: List[Dict[str, Any]], search_string: str) -> List[Dict[str, Any]]:
     """Фильтрует транзакции по заданной строке поиска."""
