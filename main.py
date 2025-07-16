@@ -30,7 +30,7 @@ def load_csv(file_path: str, delimiter: str = ";") -> List[Dict[str, Any]]:
 def load_excel(file_path: str) -> List[Dict[str, Any]]:
     """Загружает данные из XLSX файла."""
     df = pd.read_excel(file_path)
-    # Преобразуем ключи столбцов в строки
+    """Преобразуем ключи столбцов в строки"""
     return [{str(k): v for k, v in item.items()} for item in df.to_dict(orient="records")]
 
 
