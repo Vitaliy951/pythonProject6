@@ -9,8 +9,7 @@ def filter_by_state(data: List[Dict], state: str) -> List[Dict]:
 
 def sort_by_date(data: List[Dict], ascending: bool = True) -> List[Dict]:
     """Сортировка списка словарей по датам."""
-    return sorted(data, key=lambda x: datetime.strptime(x['date'], '%Y-%m-%d'), reverse=not ascending)
-
+    return sorted(data, key=lambda x: x['date'], reverse=not ascending)
 
 def format_date(date_str: str, current_format: str, desired_format: str) -> str:
     """Преобразование даты из одного формата в другой."""

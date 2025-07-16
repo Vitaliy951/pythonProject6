@@ -41,10 +41,8 @@ def filter_by_search(transactions: List[Dict[str, Any]], search_string: str) -> 
 
 
 def count_transactions_by_category(transactions: List[Dict[str, Any]], categories: List[str]) -> Dict[str, int]:
-
     """Подсчитывает количество транзакций по заданным категориям."""
     category_counter: Counter = Counter()
-
     for transaction in transactions:
         category = transaction.get("category")
         if category in categories:
@@ -104,7 +102,7 @@ def main() -> None:
         sorted_transactions = filtered_by_state
         if sort_choice == "да":
             order_choice = input("Отсортировать по возрастанию или по убыванию? ").strip().lower()
-            ascending = order_choice == "возрастанию"  # не стал прописывать блок на искл. неправильного ввода
+            ascending = order_choice == "возрастанию"
             sorted_transactions = sort_by_date(filtered_by_state, ascending)
 
         """Запрос на фильтрацию по валюте"""
@@ -117,7 +115,7 @@ def main() -> None:
             input("Отфильтровать список транзакций по определенному слову в описании? Да/Нет: ").strip().lower()
         )
         if search_filter_choice == "да":
-            search_string = input("Введите слово для фильтрации: ")  # не совсем понятно, что он тут введет
+            search_string = input("Введите слово для фильтрации: ")
             sorted_transactions = filter_by_search(sorted_transactions, search_string)
 
         """ Вывод результатов """
@@ -128,14 +126,15 @@ def main() -> None:
         print("Распечатываю итоговый список транзакций...")
         print(f"Всего банковских операций в выборке: {len(sorted_transactions)}")
         for transaction in sorted_transactions:
-            account_type = transaction.get("account_type", "счет")  # Предположим, что в транзакции есть этот ключ
-            account_number = transaction.get("account_number", "")
-            masked_info = mask_account_card(f"{account_type} {account_number}")
             description = transaction.get("description", "Без описания")
-            amount = transaction.get("amount", "0")
-            currency = transaction.get("currency", "руб.")
-            date = transaction.get("date", "неизвестно")
-            print(f"{date} {description}\n{masked_info}\nСумма: {amount} {currency}\n")
+            if choice == "1":
+                amount = transaction["operationAmount"]["amount"]
+                currency = transaction["operationAmount"]["currency"]["name"]
+            else:
+                amount = transaction["amount"]
+                currency = transaction["currency_code"]
+            date = transaction["date"]
+            print(f"{date} {description}\nСумма: {amount} {currency}\n")
 
     except Exception as e:
         print(f"Произошла ошибка: {e}")
