@@ -1,6 +1,7 @@
 import json
 import os
 import logging
+import pandas as pd
 from typing import List, Dict, Union
 
 """ Настройка логирования для модуля utils """
@@ -42,3 +43,32 @@ def read_json_file(file_path: str) -> Union[List[Dict], None]:
         except json.JSONDecodeError:
             logger.error(f"Ошибка декодирования JSON в файле: {file_path}")
             return None
+
+
+def process_events_data(df: pd.DataFrame) -> Dict[str, Union[str, List[Dict]]]:
+    """Обрабатывает данные о транзакциях из DataFrame и возвращает структурированные данные.
+
+    Аргументы:
+    df -- DataFrame с данными о транзакциях.
+
+    Возвращает:
+    Словарь с итоговыми данными или сообщением об ошибке.
+    """
+    try:
+        # Преобразуем DataFrame в список словарей
+        transactions = df.to_dict(orient='records')
+
+        # Пример обработки: фильтрация успешных операций
+        successful_transactions = [t for t in transactions if t['Статус'] == 'OK']
+
+        logger.info(f"Обработано {len(transactions)} транзакций, из них {len(successful_transactions)} успешных.")
+
+        # Возвращаем обработанные данные
+        return {
+            'total_transactions': len(transactions),
+            'successful_transactions': len(successful_transactions),
+            'transactions': successful_transactions
+        }
+    except Exception as e:
+        logger.error(f"Ошибка при обработке данных: {str(e)}")
+        return {'error': 'Ошибка при обработке данных.'}
