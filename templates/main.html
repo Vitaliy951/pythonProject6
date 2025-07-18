@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Финансовое приложение</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css"> <!-- Подключение CSS-файла -->
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-5">Добро пожаловать в финансовое приложение!</h1>
+    <div class="mt-4">
+        <h2>Меню</h2>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="/main">Главная</a></li>
+            <li class="list-group-item"><a href="/events">События</a></li>
+            <li class="list-group-item">Сервисы:
+                <ul>
+                    <li>
+                        <form action="/services/cashback_analysis" method="POST">
+                            <input type="number" name="year" placeholder="Год" required>
+                            <input type="number" name="month" placeholder="Месяц" required>
+                            <button type="submit" class="btn btn-link">Выгодные категории повышенного кешбэка</button>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/services/investment_bank" method="POST">
+                            <button type="submit" class="btn btn-link">Инвесткопилка</button>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/services/simple_search" method="POST">
+                            <input type="text" name="query" placeholder="Поиск" required>
+                            <button type="submit" class="btn btn-link">Простой поиск</button>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/services/phone_search" method="POST">
+                            <input type="text" name="phone" placeholder="Телефон" required>
+                            <button type="submit" class="btn btn-link">Поиск по телефонным номерам</button>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/services/person_transfer_search" method="POST">
+                            <input type="text" name="transfer_id" placeholder="ID перевода" required>
+                            <button type="submit" class="btn btn-link">Поиск переводов физическим лицам</button>
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li class="list-group-item">Отчеты:
+                <ul>
+                    <li>
+                        <form action="/reports/spending_by_category" method="POST">
+                            <button type="submit" class="btn btn-link">Траты по категории</button>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/reports/spending_by_weekday" method="POST">
+                            <button type="submit" class="btn btn-link">Траты по дням недели</button>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/reports/spending_by_workday" method="POST">
+                            <button type="submit" class="btn btn-link">Траты в рабочий/выходной день</button>
+                        </form>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
