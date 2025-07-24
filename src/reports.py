@@ -3,7 +3,6 @@ import pandas as pd
 from functools import wraps
 import json
 
-# Настройка логирования
 logging.basicConfig(level=logging.INFO)
 
 
