@@ -4,26 +4,26 @@ import logging
 import pandas as pd
 from typing import List, Dict, Union
 
-""" Настройка логирования для модуля utils """
-
+# Настройка логирования для модуля utils
 logger = logging.getLogger('utils')
 logger.setLevel(logging.DEBUG)
 
-""" Создание директории для логов, если она не существует """
+# Создание директории для логов, если она не существует
 log_directory = 'logs'
 if not os.path.exists(log_directory):
     os.makedirs(log_directory)
 
-""" Создание обработчика для записи логов в файл """
+# Создание обработчика для записи логов в файл
 file_handler = logging.FileHandler(os.path.join(log_directory, 'utils.log'))
 file_handler.setLevel(logging.DEBUG)
 
-""" Настройка форматирования логов """
+# Настройка форматирования логов
 file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 file_handler.setFormatter(file_formatter)
 
-""" Добавление обработчика к логгеру """
+# Добавление обработчика к логгеру
 logger.addHandler(file_handler)
+
 
 def read_json_file(file_path: str) -> Union[List[Dict], None]:
     """Читает JSON-файл и возвращает список словарей с данными о транзакциях или None в случае ошибки."""
@@ -43,6 +43,27 @@ def read_json_file(file_path: str) -> Union[List[Dict], None]:
         except json.JSONDecodeError:
             logger.error(f"Ошибка декодирования JSON в файле: {file_path}")
             return None
+
+
+def create_json_file(file_path: str, data: List[Dict]) -> None:
+    """Создает JSON-файл и записывает в него данные.
+
+    Аргументы:
+    file_path -- путь к файлу, который будет создан.
+    data -- список словарей, которые будут записаны в файл.
+    """
+    # Убедимся, что директория существует
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+        logger.info(f"Создана директория: {directory}")
+
+    try:
+        with open(file_path, 'w', encoding='utf-8') as file:
+            json.dump(data, file, ensure_ascii=False, indent=4)
+            logger.info(f"Успешно создан файл: {file_path}")
+    except Exception as e:
+        logger.error(f"Ошибка при создании JSON-файла: {str(e)}")
 
 
 def process_events_data(df: pd.DataFrame) -> Dict[str, Union[str, List[Dict]]]:
