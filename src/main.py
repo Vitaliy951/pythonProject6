@@ -64,13 +64,13 @@ def main() -> None:
 
     try:
         if choice == "1":
-            file_path = "data/operations.json"
+            file_path = "../data/operations.json"
             transactions = load_json(file_path)
         elif choice == "2":
-            file_path = "data/transactions.csv"
+            file_path = "../data/transactions.csv"
             transactions = load_csv(file_path)
         elif choice == "3":
-            file_path = "data/transactions_excel.xlsx"
+            file_path = "../data/transactions_excel.xlsx"
             transactions = load_excel(file_path)
         else:
             print("Неверный выбор.")

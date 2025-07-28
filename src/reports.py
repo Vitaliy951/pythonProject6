@@ -1,8 +1,15 @@
 import logging
+<< << << < HEAD
+import pandas as pd
+from functools import wraps
+import json
+
+== == == =
 from functools import wraps
 import json
 
 # Настройка логирования
+>> >> >> > c7a8de508a048c1999a1713f01a021da414b353d
 logging.basicConfig(level=logging.INFO)
 
 
